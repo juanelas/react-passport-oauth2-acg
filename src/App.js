@@ -1,26 +1,66 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Route, Redirect, Switch, Link } from 'react-router-dom';
+import Login from './containers/Login';
+import LoginGithub from "./containers/LoginGithub";
+import Intranet from './containers/Intranet';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            jwt: localStorage.getItem('jwt')
+        };
+    }
+
+    setJwt(token) {
+        if (token) {
+            localStorage.setItem('jwt', token);
+        } else {
+            localStorage.removeItem('jwt');
+        }
+        this.setState({
+            jwt: token
+        });
+    }
+
+    isAuthenticated() {
+        return (this.state.jwt) ? true : false;
+    }
+
+    render() {
+        return (
+            <Router>
+                <h1>My custom intranet</h1>
+                <Link to="/logout">Logout</Link>
+                <Switch>
+                    <Route path="/login" render={(props) => (
+                        this.isAuthenticated() ?
+                            (<Redirect to="/" />) :
+                            (<Login {...props} setJwt={(token) => this.setJwt(token)} />
+                            )
+                    )} />
+                    <Route path="/logout" render={() => {
+                        this.setJwt(null);
+                        return (
+                            <Redirect to="/login" />
+                        )
+                    }
+                    } />
+                    <Route path="/auth/github/callback" render={(props) => (
+                        this.isAuthenticated() ?
+                            (<Redirect to="/" />) :
+                            (<LoginGithub {...props} setJwt={(token) => this.setJwt(token)} />
+                            )
+                    )} />
+                    <Route path="/" render={(props) => (
+                        this.isAuthenticated() ?
+                            (<Intranet {...props} jwt={this.state.jwt} />) :
+                            (<Redirect to="/login" />)
+                    )} />
+                </Switch>
+            </Router>
+        );
+    }
 }
 
 export default App;
