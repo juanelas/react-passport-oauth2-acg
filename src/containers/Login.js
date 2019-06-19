@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 class Login extends React.Component {
   constructor(props) {
@@ -44,7 +45,7 @@ class Login extends React.Component {
             <input type="submit" value="Log In" />
           </div>
         </form>
-        <a href="https://localhost:8443/api/login/github">Login with GitHub</a>
+        <Link to="/auth/github/callback">Login with GitHub</Link>
       </div>
     );
   }

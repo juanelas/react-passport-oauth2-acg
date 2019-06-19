@@ -6,18 +6,20 @@ class LoginGithub extends React.Component {
   }
 
   async redirectCallback() {
-    const url = 'https://localhost:8443/api/auth/github/callback' + this.props.location.search;
+    const origin = 'https://localhost:8443';
 
-    const res = await fetch(url, {
-      method: 'GET', // or 'PUT'
-    }).catch(error => console.error(error));
-    if (res.status === 200) {
-      const json = await res.json();
-      this.props.setJwt(json.jwt);
-    }
-    else {
-      alert('Login incorrect');
-    }
+    window.open(`${origin}/api/login/github`, 'popup')
+    this.listener = (ev) => {
+      if(ev.origin === origin) {
+        this.props.setJwt(ev.data.tokenJwt);
+      }
+    };
+
+    window.addEventListener("message", this.listener);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("message", this.listener);
   }
 
   render() {
@@ -25,7 +27,6 @@ class LoginGithub extends React.Component {
       <div className="LoginGithub">
         <p>Connecting with GitHub... Please wait</p>
       </div>
-
     );
   }
 }
