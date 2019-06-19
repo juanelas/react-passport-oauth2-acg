@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Redirect, Switch, Link } from 'react-ro
 import Login from './containers/Login';
 import LoginGithub from "./containers/LoginGithub";
 import Intranet from './containers/Intranet';
+import Logout from './containers/Logout';
 
 class App extends React.Component {
     constructor(props) {
@@ -39,13 +40,9 @@ class App extends React.Component {
                             (<Login {...props} setJwt={(token) => this.setJwt(token)} />
                             )
                     )} />
-                    <Route path="/logout" render={() => {
-                        this.setJwt(null);
-                        return (
-                            <Redirect to="/login" />
-                        )
-                    }
-                    } />
+                    <Route path="/logout" component={(props) =>
+                        <Logout {...props} setJwt={(token) => this.setJwt(token)}/>
+                    }/>
                     <Route path="/auth/github/callback" render={(props) => (
                         this.isAuthenticated() ?
                             (<Redirect to="/" />) :
