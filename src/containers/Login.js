@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import apiServer from '../config/apiServer';
 
 class Login extends React.Component {
   constructor(props) {
@@ -9,7 +10,7 @@ class Login extends React.Component {
   }
   async onSubmit(e) {
     e.preventDefault();
-    const url = 'https://localhost:8443/api/login';
+    const url = apiServer + '/api/auth/local/login';
     var data = { username: this.usernameInput.current.value, password: this.passwordInput.current.value };
 
     const res = await fetch(url, {

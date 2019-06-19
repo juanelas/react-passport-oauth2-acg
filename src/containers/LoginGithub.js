@@ -1,16 +1,11 @@
 import React from 'react';
+import apiServer from '../config/apiServer';
 
 class LoginGithub extends React.Component {
   componentDidMount() {
-    this.redirectCallback();
-  }
-
-  async redirectCallback() {
-    const origin = 'https://localhost:8443';
-
-    window.open(`${origin}/api/login/github`, 'popup')
+    window.open(`${apiServer}/api/auth/github/login/spa`, 'popup')
     this.listener = (ev) => {
-      if(ev.origin === origin) {
+      if (ev.origin === apiServer) {
         this.props.setJwt(ev.data.tokenJwt);
       }
     };

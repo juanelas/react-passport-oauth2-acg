@@ -1,6 +1,7 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import jsonwebtoken from 'jsonwebtoken';
+import apiServer from '../config/apiServer';
 
 class Intranet extends React.Component {
   constructor(props) {
@@ -15,7 +16,7 @@ class Intranet extends React.Component {
     }
   }
   async fetchPrivateFortune() {
-    const url = 'https://localhost:8443/api/fortune';
+    const url = apiServer + '/api/fortune';
     fetch(url, {
       method: 'GET', // or 'PUT'
       headers: {

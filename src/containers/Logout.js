@@ -1,9 +1,9 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 
-class Login extends React.Component {
+class Logout extends React.Component {
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.setJwt(null);
   }
 
@@ -14,4 +14,4 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+export default Logout;
